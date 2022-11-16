@@ -9,8 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cosmjs/proto-signing": "^0.29.4",
+    "@cosmjs/stargate": "^0.29.4",
+    "@nextui-org/react": "^1.0.0-beta.10",
     "next": "13.0.3",
+    "next-transpile-modules": "^10.0.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "web3": "1.7.4",
+    "web3-eth-contract": "^1.8.1"
   }
 }
