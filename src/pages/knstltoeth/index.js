@@ -3,14 +3,19 @@ import Knstl from '../../page-components/Knstl';
 import { useState } from 'react';
 export default function EthtoKnstl () {
     const [validated, setValidated] = useState(false);
+    const [amount, setAmount] = useState();
     return ( 
         <div className='center'>
         {!validated ?
             <Knstl 
-            setValidated={setValidated}
+                amount={amount}
+                setAmount={setAmount}
+                setValidated={setValidated}
             />
             :
-            <Wallet />
+            <Wallet
+               amount={amount}
+            />
         } 
         </div>
     )

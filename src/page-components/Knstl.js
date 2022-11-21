@@ -1,24 +1,28 @@
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Button, Input } from "@nextui-org/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { CreateOrder, QueryOrder } from "../api/Order";
 
-const Knstl = (props) => {
+const Knstl = ({
+    amount, 
+    setAmount, 
+    setValidated
+    }) => {
     const [connected, setConnected] = useState(false);
     const [mnemonic, setMnemonic] = useState("cat cable orange column deposit bone hair intact rabbit quantum verb rent twenty since despair armor subway crowd uniform normal buffalo galaxy furnace drop");
     const [wallet, setWallet] = useState();
     const [client, setClient] = useState();
-    const [amount, setAmount] = useState();
     const [orderid, setOrderid] = useState();
+    const recipientRef = useRef();
     const rpcEndpoint = "http://node7.konstellation.tech:26657";
-    const corporateAddress = "darc139k62t62zx5gx4m02cc8r3r44ndshyy98p8x8q";
+    const corporateAddress = "darc1xapv4pvpshhnxnqev267zkav7us9yp0e7lnk2e";
     const connectKnstl = async () => {
         // console.log(mnemonic);
         const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {prefix: 'darc'});
-        console.log("123");
+        // console.log("123");
         const client = await SigningStargateClient.connectWithSigner(rpcEndpoint, wallet);
-        console.log("234");
+        // console.log("234");
         setClient(client);
         setWallet(wallet);
         setMnemonic("");
@@ -28,9 +32,12 @@ const Knstl = (props) => {
     const fetchTx = useCallback(async () => {
         let res = await QueryOrder(orderid);
         console.log(res);
-        if (res === "order_created"){
+        if (res === "order_completed"){
             alert("Order Has been validated, swap now");
-            props.setValidated(true);
+            setValidated(true);
+        } else if (res === "order_failed") {
+            alert('Order Has been failed. Retry');
+            window.open('/');
         }
     }, [orderid]);
 
@@ -50,7 +57,7 @@ const Knstl = (props) => {
             "KNSTL",
             "ETH",
             account.address,
-            "0x5B08716fCdA616F9D326D184267cA3a74C0993cB",
+            recipientRef.current.value,
             parseFloat(amount)
         );
         if (res.result !== "Created") return;
@@ -106,6 +113,7 @@ const Knstl = (props) => {
             </>
             :
             <>
+                DARC to Bridge : &emsp;
                 <Input
                     id="amount"
                     aria-label="abcd"
@@ -115,6 +123,13 @@ const Knstl = (props) => {
                 />
                 &emsp;DARC
                 <h2/>
+                Recipient : &emsp;&emsp;&emsp;
+                <Input
+                    id="recipient"
+                    aria-label="abcd"
+                    ref={recipientRef}
+                    placeholder="Recipient ETH address"
+                />
                 <Button
                     aria-label="abcd"
                     onPress={sendDARC}

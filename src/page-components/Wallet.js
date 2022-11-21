@@ -4,9 +4,9 @@ import Web3 from 'web3';
 import SwapHandler from "../abi/SwapHandler.json";
 import WrappedDarc from "../abi/WrappedDarc.json";
 
-const Wallet = () => {
+const Wallet = ({amount}) => {
     const [account, setAccount] = useState();
-    const [amount, setAmount] = useState('');
+    // const [amount, setAmount] = useState('');
     const [approve, setApprove] = useState(false);
     const [explorer, setExplorer] = useState();
     const [balances, setBalances] = useState({
@@ -45,7 +45,7 @@ const Wallet = () => {
     useEffect(() => {
         checkAllowance();
         return ;
-    }, [amount]);
+    });
     const getBalances = useCallback(async () => {
         const WrappedDarcContract = new web3.eth.Contract(WrappedDarc, wrappedDarcAddress);
         const SwapTokenContract = new web3.eth.Contract(WrappedDarc, swaptokenAddress);
@@ -137,9 +137,9 @@ const Wallet = () => {
     const gotoExplorer = () => {
         window.open(explorer);
     }
-    const inputEnter = (e) => {
-        setAmount(e.target.value);
-    }
+    // const inputEnter = (e) => {
+    //     setAmount(e.target.value);
+    // }
 
      return(
         <div>
@@ -159,19 +159,19 @@ const Wallet = () => {
                     <h1/>
                     &emsp;&emsp;ETH : {balances.ETH}
                     <h1/>
-                    &emsp;&emsp;DARC : {balances.DARC}
+                    &emsp;&emsp;WDARC : {balances.DARC}
                     <h1/>
                     &emsp;&emsp;SWAP : {balances.SWAP}
                     <h1/>
-                    <Input
+                    {/* <Input
                         id='amnt'
                         aria-label="Close"
                         placeholder="Amount to Swap"
                         value={amount}
                         onChange={inputEnter}
                     >    
-                    </Input>
-                    {" "} DARC
+                    </Input> */}
+                    Swap Amount : {amount}&emsp;WDARC
                     <h1/>
                     {approve
                         ?
