@@ -4,11 +4,7 @@ import { Button, Input } from "@nextui-org/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CreateOrder, QueryOrder } from "../api/Order";
 
-const Knstl = ({
-    amount, 
-    setAmount, 
-    setValidated
-    }) => {
+const Knstl = ({ amount, setAmount, setValidated }) => {
     const [connected, setConnected] = useState(false);
     const [mnemonic, setMnemonic] = useState("cat cable orange column deposit bone hair intact rabbit quantum verb rent twenty since despair armor subway crowd uniform normal buffalo galaxy furnace drop");
     const [wallet, setWallet] = useState();
@@ -37,7 +33,7 @@ const Knstl = ({
             setValidated(true);
         } else if (res === "order_failed") {
             alert('Order Has been failed. Retry');
-            window.open('/');
+            window.location.replace('/');
         }
     }, [orderid]);
 

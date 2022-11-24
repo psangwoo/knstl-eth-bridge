@@ -1,4 +1,4 @@
-import { Button, Input } from '@nextui-org/react';
+import { Button } from '@nextui-org/react';
 import { useState, useEffect, useCallback } from 'react';
 import Web3 from 'web3';
 import SwapHandler from "../abi/SwapHandler.json";
@@ -92,6 +92,7 @@ const Wallet = ({amount}) => {
 
     const DARCtoETHswap = async () => {
         // console.log("Execute Transaction: SwapHandler Contract");
+        console.log(web3.utils.toWei(amount))
         const SwapHandlerContract = new web3.eth.Contract(SwapHandler, swapHandlerAddress);
         const swapDARCtoETHTx = SwapHandlerContract.methods['swapDARCtoETH'](web3.utils.toWei(amount));
     
@@ -99,9 +100,10 @@ const Wallet = ({amount}) => {
         const transactionParameters = {
             to: swapHandlerAddress,
             from: window.ethereum.selectedAddress, // must match user's active address.
-            data: swapDARCtoETHTx.encodeABI(),
+            data: swapDARCtoETHTx.encodeABI()
         };
-
+        console.log(transactionParameters)
+        console.log("asd")
         const txHash = await window.ethereum.request({
         method: 'eth_sendTransaction',
         params: [transactionParameters],

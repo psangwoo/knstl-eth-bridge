@@ -3,7 +3,6 @@ import axios from 'axios';
 const orderAPIUrl = "https://bridge-backend-api-stage.herokuapp.com/api/v1/swap/order";
 const swapHandlerAddress = "0x3FAF95A83A1191CE70f82d0c7aaD52e66DB4D289";
 
-// address of ETH should be web3.utils.toChecksumAddress(address) ed address
 export const CreateOrder = async (from, to, fromAddress, toAddress, amount) => {
     const data = {
         "amount": amount,
