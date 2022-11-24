@@ -18,6 +18,8 @@ const Wallet = ({amount}) => {
     const swapHandlerAddress = "0x3FAF95A83A1191CE70f82d0c7aaD52e66DB4D289";
     const wrappedDarcAddress = "0xFbAf1f87EfAdF0fb2f591C6D88404A1B673604De";
     const swaptokenAddress = "0x06B10F70e24304cF870513f15d74D7Dac6cEd913";
+    const wethtokenAddress = "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6";
+
     const ConnectMetaMask = async () => {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts'});
         const _web3 = new Web3(window.ethereum);
@@ -46,6 +48,8 @@ const Wallet = ({amount}) => {
         checkAllowance();
         return ;
     });
+
+
     const getBalances = useCallback(async () => {
         const WrappedDarcContract = new web3.eth.Contract(WrappedDarc, wrappedDarcAddress);
         const SwapTokenContract = new web3.eth.Contract(WrappedDarc, swaptokenAddress);
@@ -173,7 +177,6 @@ const Wallet = ({amount}) => {
                         onChange={inputEnter}
                     >    
                     </Input> */}
-                    Swap Amount : {amount}&emsp;WDARC
                     <h1/>
                     {approve
                         ?

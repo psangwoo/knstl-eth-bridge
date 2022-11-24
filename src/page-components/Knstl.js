@@ -3,6 +3,7 @@ import { SigningStargateClient } from "@cosmjs/stargate";
 import { Button, Input } from "@nextui-org/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CreateOrder, QueryOrder } from "../api/Order";
+import { priceFetcher } from '../helper/Swapestimation';
 
 const Knstl = ({ amount, setAmount, setValidated }) => {
     const [connected, setConnected] = useState(false);
@@ -10,9 +11,12 @@ const Knstl = ({ amount, setAmount, setValidated }) => {
     const [wallet, setWallet] = useState();
     const [client, setClient] = useState();
     const [orderid, setOrderid] = useState();
+    const [minoutput, setMinoutput] = useState();
     const recipientRef = useRef();
     const rpcEndpoint = "http://node7.konstellation.tech:26657";
     const corporateAddress = "darc1xapv4pvpshhnxnqev267zkav7us9yp0e7lnk2e";
+    const wethtokenAddress = "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6";
+    const wrappedDarcAddress = "0xFbAf1f87EfAdF0fb2f591C6D88404A1B673604De";
     const connectKnstl = async () => {
         // console.log(mnemonic);
         const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {prefix: 'darc'});
@@ -45,6 +49,19 @@ const Knstl = ({ amount, setAmount, setValidated }) => {
         }, 3000);
         return () => clearInterval(interval);
     }, [fetchTx]);
+
+    useEffect(() => {
+        const fetchPrice = async () => {
+            const min_amount = await priceFetcher(
+                parseFloat(amount),
+                wrappedDarcAddress,
+                wethtokenAddress
+            );
+            setMinoutput(min_amount);
+        }
+        fetchPrice();
+        return ;
+    }, [amount]);
 
     const sendDARC = async () => {
         const [account] = await wallet.getAccounts();
@@ -126,12 +143,17 @@ const Knstl = ({ amount, setAmount, setValidated }) => {
                     ref={recipientRef}
                     placeholder="Recipient ETH address"
                 />
+                <h2/>
+                {minoutput !== undefined &&
+                    <>Estimated amount : {minoutput} ETH </>
+                }
                 <Button
                     aria-label="abcd"
                     onPress={sendDARC}
                 >
                     Send DARC to Bridge
                 </Button>
+                <h2/>
             </>
             }
         </div>
