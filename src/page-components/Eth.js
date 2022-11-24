@@ -47,16 +47,21 @@ const Eth = () => {
         // console.log(approve);
         // console.log(data);
     }
-    useEffect(async () => {
+
+    useEffect(() => {
+        const fetchPrice = async () => {
+            const min_amount = await priceFetcher(
+                parseFloat(amount),
+                wethtokenAddress,
+                wrappedDarcAddress
+            );
+            setMinoutput(min_amount);
+        }
         checkAllowance();
-        const min_amount = await priceFetcher(
-            parseFloat(amount),
-            wethtokenAddress,
-            wrappedDarcAddress
-        );
-        setMinoutput(min_amount);
+        fetchPrice();
         return ;
     }, [amount]);
+
     const getBalances = useCallback(async () => {
         const WrappedDarcContract = new web3.eth.Contract(WrappedDarc, wrappedDarcAddress);
         const SwapTokenContract = new web3.eth.Contract(WrappedDarc, swaptokenAddress);
